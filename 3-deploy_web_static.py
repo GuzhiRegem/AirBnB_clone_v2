@@ -8,6 +8,7 @@ from datetime import datetime
 
 env.hosts = ['34.74.218.204', '34.138.156.219']
 
+
 def do_pack():
     """ do_ pack """
     try:
@@ -18,6 +19,7 @@ def do_pack():
         return name
     except Exception:
         return None
+
 
 def do_deploy(archive_path):
     """ do_deploy """
@@ -40,6 +42,7 @@ def do_deploy(archive_path):
     except BaseException as e:
         print(e)
         return False
+
 
 def deploy():
     """ deploy """
