@@ -18,7 +18,7 @@ def do_deploy(archive_path):
     try:
         put(archive_path, '/tmp/')
         sudo('mkdir -p {}'.format(rel_d))
-        sudo('tar -xzf {} -C {}'.format())
+        sudo('tar -xzf {} -C {}'.format(tmp_d, rel_d))
         sudo('rm {}'.format(tmp_d))
         sudo('mv {}web_static/* {}'.format(rel_d, rel_d))
         sudo('rm -rf {}web_static'.format(rel_d))
