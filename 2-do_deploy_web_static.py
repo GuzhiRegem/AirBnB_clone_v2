@@ -26,5 +26,6 @@ def do_deploy(archive_path):
         sudo('ln -s {} /data/web_static/current'.format(rel_d))
         print('deployed')
         return True
-    except BaseException:
+    except BaseException as e:
+        print(e)
         return False
