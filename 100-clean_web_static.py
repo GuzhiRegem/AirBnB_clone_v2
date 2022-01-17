@@ -18,17 +18,17 @@ def do_clean(number=0):
         "head -n{}".format(number)
     ]
     with lcd("versions"):
-        lis = local("|".join(comms), capture=True).split('\n')
+        lis = local(" | ".join(comms), capture=True).split('\n')
         for ind, val in enumerate(lis):
             lis[ind] = val[:-1] if val[-1] == "\r" else val
-        l_lis = local("|".join(comms[:-1]), capture=True).split('\n')
+        l_lis = local(" | ".join(comms[:-1]), capture=True).split('\n')
         for ind, val in enumerate(l_lis):
             l_lis[ind] = val[:-1] if val[-1] == "\r" else val
         for a in l_lis:
             if a not in lis:
                 local('rm -r {}'.format(a))
     with cd("/data/web_static/releases/"):
-        l_lis = local("|".join(comms[:-1]), capture=True).split('\n')
+        l_lis = local(" | ".join(comms[:-1]), capture=True).split('\n')
         for ind, val in enumerate(l_lis):
             l_lis[ind] = val[:-1] if val[-1] == "\r" else val
         for a in l_lis:
