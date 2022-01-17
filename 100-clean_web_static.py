@@ -19,6 +19,6 @@ def do_clean(number=0):
     ]
     outp = sudo("|".join(comms))
     lis = outp.split('\n')
-    for val, ind in enumerate(lis):
+    for ind, val in enumerate(lis):
         lis[ind] = str(val)
     print(lis)
