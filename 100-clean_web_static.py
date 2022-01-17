@@ -13,4 +13,5 @@ def do_clean(number=0):
     """ do_ clean """
     number = 1 if int(number) == 0 else int(number)
     outp = sudo("ls -1 /data/web_static/releases")
+    print(outp)
     print(outp.split('\n'))
