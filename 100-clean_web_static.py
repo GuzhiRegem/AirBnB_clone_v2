@@ -22,4 +22,5 @@ def do_clean(number=0):
     for ind, val in enumerate(lis):
         if val[-1] == "\r":
             lis[ind] = val[:-1]
-    print(lis)
+    sudo('rm -rv !("{}")'.format('"|"'.join(lis)))
+    
