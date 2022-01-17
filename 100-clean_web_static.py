@@ -18,5 +18,7 @@ def do_clean(number=0):
         "head -n{}".format(number)
     ]
     outp = sudo("|".join(comms))
+    for val, ind in enumerate(outp):
+        outp[ind] = str(val)
     print(outp)
     print(outp.split('\n'))
