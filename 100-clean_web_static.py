@@ -22,7 +22,7 @@ def do_clean(number=0):
     for ind, val in enumerate(lis):
         if val[-1] == "\r":
             lis[ind] = val[:-1]
-    with lcd("versions")
+    with lcd("versions"):
         sudo('rm -rv !("{}")'.format('"|"'.join(lis)))
     with cd("/data/web_static/releases/"):
         sudo('rm -rv !("{}")'.format('"|"'.join(lis)))
