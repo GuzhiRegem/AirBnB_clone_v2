@@ -2,7 +2,7 @@
 """
     module
 """
-from fabric.api import run, env, put, sudo, local
+from fabric.api import run, env, put, sudo, local, cd, lcd
 import os
 from datetime import datetime
 
@@ -17,7 +17,12 @@ def do_clean(number=0):
         'grep "web_static"',
         "head -n{}".format(number)
     ]
-    outp = local("|".join(comms))
+    outp = local("|".join(comms), capture=True)
     lis = outp.split('\n')
-    print(lis)
-    
+    for ind, val in enumerate(lis):
+        if val[-1] == "\r":
+            lis[ind] = val[:-1]
+    with lcd("versions")
+        sudo('rm -rv !("{}")'.format('"|"'.join(lis)))
+    with cd("/data/web_static/releases/"):
+        sudo('rm -rv !("{}")'.format('"|"'.join(lis)))
