@@ -28,7 +28,7 @@ def do_clean(number=0):
             if a not in lis:
                 local('rm -r {}'.format(a))
     with cd("/data/web_static/releases/"):
-        l_lis = local(" | ".join(comms[:-1])).split('\n')
+        l_lis = sudo(" | ".join(comms[:-1])).split('\n')
         for ind, val in enumerate(l_lis):
             l_lis[ind] = val[:-1] if val[-1] == "\r" else val
         for a in l_lis:
