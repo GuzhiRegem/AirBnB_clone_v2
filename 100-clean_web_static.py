@@ -2,7 +2,6 @@
 """
     module
 """
-from cv2 import exp
 from fabric.api import run, env, put, sudo, local, cd, lcd
 
 env.hosts = ['34.74.218.204', '34.138.156.219']
