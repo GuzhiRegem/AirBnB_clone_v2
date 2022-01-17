@@ -23,6 +23,6 @@ def do_clean(number=0):
         if val[-1] == "\r":
             lis[ind] = val[:-1]
     for a in lis:
-        sudo('ls -rv /data/web_static/releases/!("{}")'.format('"|"'.join(lis)))
-        sudo('ls -rv versions/!("{}")'.format('"|"'.join(lis)))
+        sudo('ls -v /data/web_static/releases/!("{}")'.format('"|"'.join(lis)))
+        sudo('ls -v versions/!("{}")'.format('"|"'.join(lis)))
     
