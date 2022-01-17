@@ -13,16 +13,16 @@ def do_clean(number=0):
     """ do_ clean """
     number = 1 if int(number) == 0 else int(number)
     comms = [
-        'ls -1t /data/web_static/releases',
+        'ls -1t versions',
         'grep "web_static"',
         "head -n{}".format(number)
     ]
-    outp = sudo("|".join(comms))
+    outp = local("|".join(comms))
     lis = outp.split('\n')
     for ind, val in enumerate(lis):
         if val[-1] == "\r":
             lis[ind] = val[:-1]
     for a in lis:
         sudo('ls -v /data/web_static/releases/!("{}")'.format('"|"'.join(lis)))
-        sudo('ls -v versions/!("{}")'.format('"|"'.join(lis)))
+        local('ls -v versions/!("{}")'.format('"|"'.join(lis)))
     
