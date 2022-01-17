@@ -19,8 +19,5 @@ def do_clean(number=0):
     ]
     outp = local("|".join(comms))
     lis = outp.split('\n')
-    for ind, val in enumerate(lis):
-        if val[-1] == "\r":
-            lis[ind] = val[:-1]
     print(lis)
     
