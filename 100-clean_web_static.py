@@ -20,5 +20,6 @@ def do_clean(number=0):
     outp = sudo("|".join(comms))
     lis = outp.split('\n')
     for ind, val in enumerate(lis):
-        lis[ind] = str(val)
+        if val[-2:] == "\r":
+            lis[ind] = val[:-2]
     print(lis)
