@@ -12,6 +12,11 @@ env.hosts = ['34.74.218.204', '34.138.156.219']
 def do_clean(number=0):
     """ do_ clean """
     number = 1 if int(number) == 0 else int(number)
-    outp = sudo('ls -1t /data/web_static/releases | grep "web_static"')
+    comms = [
+        'ls -1t /data/web_static/releases',
+        'grep "web_static"',
+        "head -n{}".format(number)
+    ]
+    outp = sudo("|".join(comms))
     print(outp)
     print(outp.split('\n'))
