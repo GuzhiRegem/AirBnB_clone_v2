@@ -8,7 +8,9 @@ env.hosts = ['34.74.218.204', '34.138.156.219']
 
 
 def do_clean(number=0):
-    """ do_clean """
+    """
+    do_clean
+    """
     number = 1 if int(number) == 0 else int(number)
     comms = [
         'ls -1t',
