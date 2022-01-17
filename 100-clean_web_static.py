@@ -22,6 +22,7 @@ def do_clean(number=0):
     for ind, val in enumerate(lis):
         if val[-1] == "\r":
             lis[ind] = val[:-1]
-    sudo('rm -rv /data/web_static/releases/!("{}")'.format('"|"'.join(lis)))
-    sudo('rm -rv versions/!("{}")'.format('"|"'.join(lis)))
+    for a in lis:
+        sudo('ls -rv /data/web_static/releases/!("{}")'.format('"|"'.join(lis)))
+        sudo('ls -rv versions/!("{}")'.format('"|"'.join(lis)))
     
