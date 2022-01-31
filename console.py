@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import models
 
 
 class HBNBCommand(cmd.Cmd):
@@ -37,7 +38,6 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
-
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
         """
@@ -115,43 +115,44 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        # --------------20/12--------------
+        list_att = args.split(' ')[1:]
+        # ---------------------------------
         if not args:
             print("** class name missing **")
             return
-        arg_lis = args.split()
-        if arg_lis[0] not in HBNBCommand.classes:
+        elif args.split(' ')[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        key_lis = []
-        if len(arg_lis) > 1:
-            for arg in arg_lis[1:]:
-                values = arg.split('=', 1)
-                try:
-                    if values[1][0] == '"' and values[1][-1] == '"':
-                        out = [values[0], ' '.join(values[1][1:-1].split('_'))]
-                        key_lis.append(out)
-                        continue
-                    try:
-                        num = float(values[1])
-                        if '.' not in values[1]:
-                            num = int(values[1])
-                        out = [values[0], num]
-                        key_lis.append(out)
-                    except ValueError:
-                        continue
-                except IndexError:
-                    continue
-        new_instance = HBNBCommand.classes[arg_lis[0]]()
-        for opt in key_lis:
-            setattr(new_instance, opt[0], opt[1])
-        storage.new(new_instance)
-        print(new_instance.id)
+        new_instance = HBNBCommand.classes[args.split(' ')[0]]()
+        # --------------20/12--------------
+        if list_att:
+            for i in list_att:
+                if '=' in i:
+                    key = i.split('=')[0]
+                    value = i.split('=')[1]
+                    if value[0] == value[-1] == '"':
+                        value = value[1:-1]
+                        value = value.replace('"', '')
+                        value = value.replace('_', ' ')
+                    else:
+                        try:
+                            value = int(value)
+                        except ValueError:
+                            try:
+                                value = float(value)
+                            except ValueError:
+                                continue
+                    setattr(new_instance, key, value)
+        # ---------------------------------
         storage.save()
+        new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
-        print("[Usage]: create <className>\n")
+        print("[Usage]: create <className>")
 
     def do_show(self, args):
         """ Method to show an individual object """
@@ -228,11 +229,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all(args).items():
+            for k, v in models.storage.all().items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage.all().items():
+            for k, v in models.storage.all().items():
                 print_list.append(str(v))
 
         print(print_list)

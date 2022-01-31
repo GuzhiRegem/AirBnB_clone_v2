@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
-#comment
-sudo apt update
-sudo apt -y install nginx
-mkdir -p /data/web_static/releases/
+# comment
+
+apt update
+apt install nginx -y
 mkdir -p /data/web_static/shared/
-mkdir -p /data/web_static/releases/test
-echo '<html>
+mkdir -p /data/web_static/releases/test/
+echo "<html>
   <head>
   </head>
   <body>
     Holberton School
   </body>
-</html>' > /data/web_static/releases/test/index.html
-ln -s /data/web_static/releases/test/ /data/web_static/current
-chown -hR ubuntu:ubuntu /data
-sudo sed -i '/^\}/i   location /hbnb_static/ {\n\talias /data/web_static/current/;\n\t}' /etc/nginx/sites-available/default
-sudo service nginx restart
+</html>" > /data/web_static/releases/test/index.html
+ln -sf /data/web_static/releases/test/ /data/web_static/current
+chown -R ubuntu /data
+chgrp -R ubuntu /data
+sed -i "/listen 80 default_server/a location /hbnb_static/ { alias /data/web_static/current/; }" /etc/nginx/sites-available/default
+service nginx restart

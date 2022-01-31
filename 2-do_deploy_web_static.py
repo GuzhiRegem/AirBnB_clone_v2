@@ -1,31 +1,52 @@
 #!/usr/bin/python3
 """
-    module
+Write a Fabric script that generates a .tgz archive
+from the contents of the web_static folder
 """
-from fabric.api import run, env, put, sudo
+
+
+from fabric.api import run
+from fabric.api import local
+from fabric.api import get
+from fabric.api import put
+from fabric.api import env
+from datetime import datetime
 import os
 
-env.hosts = ['34.74.218.204', '34.138.156.219']
+env.hosts = ['34.74.161.43', '35.185.60.222']
+
+
+def do_pack():
+    """ do_pack """
+    complete_time = datetime.now()
+    string_time = complete_time.strftime("%Y%m%d%H%M%S")
+    tgz_name = string_time + '.tgz'
+    local("mkdir -p versions")
+    local("tar -cvzf versions/web_static_{} web_static".format(tgz_name))
+    path_tgz = 'versions/web_static_{}'.format(tgz_name)
+    if os.path.exists(path_tgz):
+        return path_tgz
+    else:
+        return None
 
 
 def do_deploy(archive_path):
     """ do_deploy """
-    filename = archive_path.split('/')[-1][:-4]
-    tmp_d = '/tmp/{}.tgz'.format(filename)
-    rel_d = '/data/web_static/releases/' + filename + '/'
-    if not os.path.exists(archive_path):
-        return False
-    try:
-        put(archive_path, '/tmp/')
-        sudo('mkdir -p {}'.format(rel_d))
-        sudo('tar -xzf {} -C {}'.format(tmp_d, rel_d))
-        sudo('rm {}'.format(tmp_d))
-        sudo('mv {}web_static/* {}'.format(rel_d, rel_d))
-        sudo('rm -rf {}web_static'.format(rel_d))
-        sudo('rm -rf /data/web_static/current')
-        sudo('ln -s {} /data/web_static/current'.format(rel_d))
-        print('deployed')
-        return True
-    except BaseException as e:
-        print(e)
+    if os.path.exists(archive_path):
+        try:
+            file_n = archive_path.split("/")[-1]
+            no_ext = file_n.split(".")[0]
+            path = "/data/web_static/releases/"
+            put(archive_path, '/tmp/')
+            run('mkdir -p {}{}/'.format(path, no_ext))
+            run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
+            run('rm /tmp/{}'.format(file_n))
+            run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
+            run('rm -rf {}{}/web_static'.format(path, no_ext))
+            run('rm -rf /data/web_static/current')
+            run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
+            return True
+        except Exception:
+            return False
+    else:
         return False

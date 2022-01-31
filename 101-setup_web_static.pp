@@ -1,86 +1,13 @@
-# puppet file
-$nginx_conf = "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    add_header X-Served-By ${hostname};
-    root   /var/www/html;
-    index  index.html index.htm;
-    location /hbnb_static {
-        alias /data/web_static/current;
-        index index.html index.htm;
-    }
-    location /redirect_me {
-        return 301 http://cuberule.com/;
-    }
-    error_page 404 /404.html;
-    location /404 {
-      root /var/www/html;
-      internal;
-    }
-}"
+# ieiiii puppetts
+# plaza sesamoooo
 
-package { 'nginx':
-  ensure   => 'present',
-  provider => 'apt'
-} ->
-
-file { '/data':
-  ensure  => 'directory'
-} ->
-
-file { '/data/web_static':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/releases':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/releases/test':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/shared':
-  ensure => 'directory'
-} ->
-
-file { '/data/web_static/releases/test/index.html':
-  ensure  => 'present',
-  content => "Holberton School Puppet\n"
-} ->
-
-file { '/data/web_static/current':
-  ensure => 'link',
-  target => '/data/web_static/releases/test'
-} ->
-
-exec { 'chown -R ubuntu:ubuntu /data/':
-  path => '/usr/bin/:/usr/local/bin/:/bin/'
-}
-
-file { '/var/www':
-  ensure => 'directory'
-} ->
-
-file { '/var/www/html':
-  ensure => 'directory'
-} ->
-
-file { '/var/www/html/index.html':
-  ensure  => 'present',
-  content => "Holberton School Nginx\n"
-} ->
-
-file { '/var/www/html/404.html':
-  ensure  => 'present',
-  content => "Ceci n'est pas une page\n"
-} ->
-
-file { '/etc/nginx/sites-available/default':
-  ensure  => 'present',
-  content => $nginx_conf
-} ->
-
-exec { 'nginx restart':
-  path => '/etc/init.d/'
-}
+exec {'0':command => '/usr/bin/env apt update',}
+-> exec {'1':command => '/usr/bin/env apt install nginx -y',}
+-> exec {'2':command => '/usr/bin/env mkdir -p /data/web_static/shared/',}
+-> exec {'3':command => '/usr/bin/env mkdir -p /data/web_static/releases/test/',}
+-> exec {'4':command => '/usr/bin/env echo "</html>" > /data/web_static/releases/test/index.html',}
+-> exec {'5':command => '/usr/bin/env ln -sf /data/web_static/releases/test/ /data/web_static/current',}
+-> exec {'6':command => '/usr/bin/env chown -R ubuntu /data',}
+-> exec {'7':command => '/usr/bin/env chgrp -R ubuntu /data',}
+-> exec {'8':command => '/usr/bin/env sed -i "/listen 80 default_server/a location /hbnb_static/ { alias /data/web_static/current/; }" /etc/nginx/sites-available/default',}
+-> exec {'9':command => '/usr/bin/env service nginx restart',}
